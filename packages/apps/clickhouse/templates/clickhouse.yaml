@@ -90,7 +90,7 @@ spec:
                - name: data-volume-template
                  mountPath: /var/lib/clickhouse
                - name: config-volume
-                 mountPath: /etc/clickhouse-server/
+                 mountPath: /etc/clickhouse-server/config.d
 
          volumes:
            - name: config-volume
