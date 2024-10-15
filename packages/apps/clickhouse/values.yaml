@@ -43,6 +43,10 @@ backup:
   s3SecretKey: ju3eum4dekeich9ahM1te8waeGai0oog
   resticPassword: ChaXoveekoh6eigh4siesheeda2quai0
 
+image:
+  repository: clickhouse/clickhouse-server
+  tag: "24.2.2.71"
+
 
 clickhouse:
   config:
@@ -55,7 +59,7 @@ clickhouse:
       <clickhouse>
           <asynchronous_metric_log remove="1"/>
           <metric_log remove="1"/>
-          <query_views_log remove="1" />
+          <query_views_log remove="0" />
           <part_log remove="1"/>
           <session_log remove="1"/>
           <text_log remove="1" />
@@ -64,7 +68,7 @@ clickhouse:
           <opentelemetry_span_log remove="1"/>
           <zookeeper_log remove="1"/>
       </clickhouse>
-    query_log_ttl: |
+    query_log_ttl:
       <clickhouse>
           <query_log replace="1">
               <database>system</database>
