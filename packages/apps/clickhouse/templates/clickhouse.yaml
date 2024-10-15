@@ -68,32 +68,32 @@ spec:
             requests:
               storage: {{ . }}
   {{- end }}
-  podTemplates:
-     - name: clickhouse-per-host1
-       spec:
-         affinity:
-          podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                    - key: "clickhouse.altinity.com/chi"
-                      operator: In
-                      values:
-                        -  "{{ .Release.Name }}"
-                topologyKey: "kubernetes.io/hostname"
+    podTemplates:
+    - name: clickhouse-per-host1
+    spec:
+      affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: "clickhouse.altinity.com/chi"
+                  operator: In
+                  values:
+                    -  "{{ .Release.Name }}"
+            topologyKey: "kubernetes.io/hostname"
 
-         containers:
-           - name: clickhouse
-             imagePullPolicy: Always
-             image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-             volumeMounts:
-               - name: data-volume-template
-                 mountPath: /var/lib/clickhouse
-               - name: config-volume
-                 mountPath: /etc/clickhouse-server/config.d
+      containers:
+        - name: clickhouse
+          imagePullPolicy: Always
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          volumeMounts:
+            - name: data-volume-template
+              mountPath: /var/lib/clickhouse
+            - name: config-volume
+              mountPath: /etc/clickhouse-server/config.d
 
-         volumes:
-           - name: config-volume
-             configMap:
-               name: clickhouse-config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: clickhouse-config
             
