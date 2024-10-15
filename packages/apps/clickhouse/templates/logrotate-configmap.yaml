@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-config
+data:
+  force_drop_table.xml: {{ .Values.clickhouse.config.force_drop_table | quote }}
+  z_log_disable.xml: {{ .Values.clickhouse.config.z_log_disable | quote }}
+  query_log_ttl.xml: {{ .Values.clickhouse.config.query_log_ttl | quote }}

@@ -67,3 +67,24 @@ spec:
             requests:
               storage: {{ . }}
   {{- end }}
+          containers:
+            - name: clickhouse
+              imagePullPolicy: Always
+              image: clickhouse/clickhouse-server:24.2.2.71
+              volumeMounts:
+                - name: data-volume-template
+                  mountPath: /var/lib/clickhouse
+                - name: log-volume-template
+                  mountPath: /var/log/clickhouse-server
+              env:
+                - name: CLICKHOUSE_CONFIG
+                  value: /etc/clickhouse-server/config.d/force_drop_table.xml
+                - name: CLICKHOUSE_LOG_CONFIG
+                  value: /etc/clickhouse-server/config.d/z_log_disable.xml
+                - name: CLICKHOUSE_QUERY_LOG_TTL
+                  value: /etc/clickhouse-server/config.d/query_log_ttl.xml
+          volumes:
+            - name: config-volume
+              configMap:
+                name: clickhouse-config
+

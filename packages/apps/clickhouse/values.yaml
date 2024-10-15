@@ -5,7 +5,7 @@
 ## @param replicas Number of Clickhouse shards
 ## @param storageClass StorageClass used to store the data
 ##
-size: 10Gi
+size: 11Gi
 shards: 1
 replicas: 2
 storageClass: ""
@@ -42,3 +42,47 @@ backup:
   s3AccessKey: oobaiRus9pah8PhohL1ThaeTa4UVa7gu
   s3SecretKey: ju3eum4dekeich9ahM1te8waeGai0oog
   resticPassword: ChaXoveekoh6eigh4siesheeda2quai0
+
+
+clickhouse:
+  config:
+    force_drop_table: |
+      <yandex>
+        <max_partition_size_to_drop>0</max_partition_size_to_drop>
+        <max_table_size_to_drop>0</max_table_size_to_drop>
+      </yandex>
+    z_log_disable: |
+      <clickhouse>
+          <asynchronous_metric_log remove="1"/>
+          <metric_log remove="1"/>
+          <query_views_log remove="1" />
+          <part_log remove="1"/>
+          <session_log remove="1"/>
+          <text_log remove="1" />
+          <trace_log remove="1"/>
+          <crash_log remove="1"/>
+          <opentelemetry_span_log remove="1"/>
+          <zookeeper_log remove="1"/>
+      </clickhouse>
+    query_log_ttl: |
+      <clickhouse>
+          <query_log replace="1">
+              <database>system</database>
+              <table>query_log</table>
+              <engine>ENGINE = MergeTree PARTITION BY (event_date)
+                      ORDER BY (event_time)
+                      TTL event_date + INTERVAL 7 DAY DELETE
+              </engine>
+              <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+          </query_log>
+          <query_thread_log replace="1">
+              <database>system</database>
+              <table>query_thread_log</table>
+              <engine>ENGINE = MergeTree PARTITION BY (event_date)
+                      ORDER BY (event_time)
+                      TTL event_date + INTERVAL 7 DAY DELETE
+              </engine>
+              <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+          </query_thread_log>
+      </clickhouse>
+
