@@ -79,7 +79,7 @@ spec:
                     - key: "clickhouse.altinity.com/chi"
                       operator: In
                       values:
-                        - "stage"
+                        -  "{{ .Release.Name }}"
                 topologyKey: "kubernetes.io/hostname"
 
          containers:
